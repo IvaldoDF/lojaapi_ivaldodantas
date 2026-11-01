@@ -12,6 +12,11 @@ import {
   Patch,
 } from '@nestjs/common';
 
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { PatchProductDto } from './dto/patch-product.dto';
+import { ListProductsQueryDto } from './dto/list-products-query.dto';
+
 type Product = {
   id: number;
   name: string;
@@ -30,14 +35,27 @@ export class ProductsController {
   //}
 
   @Get()
-  findAll(@Query('q') q?: string): Product[] {
-    if (q) {
-      return this.products.filter((p) =>
-        p.name.toLowerCase().includes(q.toLowerCase()),
-      );
-    }
-    return this.products;
+findAll(@Query() query: ListProductsQueryDto): Product[] {
+  let result = this.products;
+
+  // Filtro por nome (q)
+  if (query.q) {
+    const searchTerm = query.q.toLowerCase();
+    result = result.filter((p) => p.name.toLowerCase().includes(searchTerm));
   }
+
+  // Filtro por preço mínimo (minPrice)
+  if (query.minPrice !== undefined) {
+    result = result.filter((p) => p.price >= query.minPrice!);
+  }
+
+  // Filtro por preço máximo (maxPrice)
+  if (query.maxPrice !== undefined) {
+    result = result.filter((p) => p.price <= query.maxPrice!);
+  }
+
+  return result;
+}
 
   @Get(':id')
   findOne(@Param('id') id: string): Product {
@@ -49,12 +67,12 @@ export class ProductsController {
   }
 
   @Post()
-  create(@Body() body: { name: string; price: number; stock: number }): Product {
+  create(@Body() dto: CreateProductDto): Product {
     const product: Product = {
       id: this.nextId++,
-      name: body.name,
-      price: body.price,
-      stock: body.stock,
+      name: dto.name,
+      price: dto.price,
+      stock: dto.stock,
     };
     this.products.push(product);
     return product;
@@ -63,30 +81,30 @@ export class ProductsController {
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() body: { name: string; price: number; stock: number },
+    @Body() dto: UpdateProductDto,
   ): Product {
     const product = this.findOne(id);
-    product.name = body.name;
-    product.price = body.price;
-    product.stock = body.stock;
+    product.name = dto.name;
+    product.price = dto.price;
+    product.stock = dto.stock;
     return product;
   }
 
   @Patch(':id')
   updatePartial(
     @Param('id') id: string,
-    @Body() body: { name?: string; price?: number; stock?: number },
+    @Body() dto: PatchProductDto,
   ): Product {
     const product = this.findOne(id);
 
-    if (body.name !== undefined) {
-      product.name = body.name;
+    if (dto.name !== undefined) {
+      product.name = dto.name;
     }
-    if (body.price !== undefined) {
-      product.price = body.price;
+    if (dto.price !== undefined) {
+      product.price = dto.price;
     }
-    if (body.stock !== undefined) {
-      product.stock = body.stock;
+    if (dto.stock !== undefined) {
+      product.stock = dto.stock;
     }
 
     return product;

@@ -14,14 +14,26 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsController = void 0;
 const common_1 = require("@nestjs/common");
+const create_product_dto_1 = require("./dto/create-product.dto");
+const update_product_dto_1 = require("./dto/update-product.dto");
+const patch_product_dto_1 = require("./dto/patch-product.dto");
+const list_products_query_dto_1 = require("./dto/list-products-query.dto");
 let ProductsController = class ProductsController {
     products = [];
     nextId = 1;
-    findAll(q) {
-        if (q) {
-            return this.products.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()));
+    findAll(query) {
+        let result = this.products;
+        if (query.q) {
+            const searchTerm = query.q.toLowerCase();
+            result = result.filter((p) => p.name.toLowerCase().includes(searchTerm));
         }
-        return this.products;
+        if (query.minPrice !== undefined) {
+            result = result.filter((p) => p.price >= query.minPrice);
+        }
+        if (query.maxPrice !== undefined) {
+            result = result.filter((p) => p.price <= query.maxPrice);
+        }
+        return result;
     }
     findOne(id) {
         const product = this.products.find((p) => p.id === Number(id));
@@ -30,33 +42,33 @@ let ProductsController = class ProductsController {
         }
         return product;
     }
-    create(body) {
+    create(dto) {
         const product = {
             id: this.nextId++,
-            name: body.name,
-            price: body.price,
-            stock: body.stock,
+            name: dto.name,
+            price: dto.price,
+            stock: dto.stock,
         };
         this.products.push(product);
         return product;
     }
-    update(id, body) {
+    update(id, dto) {
         const product = this.findOne(id);
-        product.name = body.name;
-        product.price = body.price;
-        product.stock = body.stock;
+        product.name = dto.name;
+        product.price = dto.price;
+        product.stock = dto.stock;
         return product;
     }
-    updatePartial(id, body) {
+    updatePartial(id, dto) {
         const product = this.findOne(id);
-        if (body.name !== undefined) {
-            product.name = body.name;
+        if (dto.name !== undefined) {
+            product.name = dto.name;
         }
-        if (body.price !== undefined) {
-            product.price = body.price;
+        if (dto.price !== undefined) {
+            product.price = dto.price;
         }
-        if (body.stock !== undefined) {
-            product.stock = body.stock;
+        if (dto.stock !== undefined) {
+            product.stock = dto.stock;
         }
         return product;
     }
@@ -71,9 +83,9 @@ let ProductsController = class ProductsController {
 exports.ProductsController = ProductsController;
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('q')),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [list_products_query_dto_1.ListProductsQueryDto]),
     __metadata("design:returntype", Array)
 ], ProductsController.prototype, "findAll", null);
 __decorate([
@@ -87,7 +99,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
     __metadata("design:returntype", Object)
 ], ProductsController.prototype, "create", null);
 __decorate([
@@ -95,7 +107,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, update_product_dto_1.UpdateProductDto]),
     __metadata("design:returntype", Object)
 ], ProductsController.prototype, "update", null);
 __decorate([
@@ -103,7 +115,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, patch_product_dto_1.PatchProductDto]),
     __metadata("design:returntype", Object)
 ], ProductsController.prototype, "updatePartial", null);
 __decorate([
