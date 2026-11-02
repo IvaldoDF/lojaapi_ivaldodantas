@@ -1,21 +1,12 @@
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PatchProductDto } from './dto/patch-product.dto';
-import { ListProductsQueryDto } from './dto/list-products-query.dto';
-type Product = {
-    id: number;
-    name: string;
-    price: number;
-    stock: number;
-};
+import { ProductsService } from './products.service';
 export declare class ProductsController {
-    private products;
-    private nextId;
-    findAll(query: ListProductsQueryDto): Product[];
-    findOne(id: string): Product;
-    create(dto: CreateProductDto): Product;
-    update(id: string, dto: UpdateProductDto): Product;
-    updatePartial(id: string, dto: PatchProductDto): Product;
-    remove(id: string): void;
+    private readonly productsService;
+    constructor(productsService: ProductsService);
+    findAll(): import("./products.service").Product[];
+    findOne(id: number): import("./products.service").Product;
+    create(dto: CreateProductDto): import("./products.service").Product;
+    update(id: number, dto: UpdateProductDto): import("./products.service").Product;
+    remove(id: number): void;
 }
-export {};

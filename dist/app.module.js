@@ -13,6 +13,7 @@ const observe_1 = require("@nestjs/observe");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const products_module_1 = require("./products/products.module");
+const catalog_module_1 = require("./catalog/catalog.module");
 _a = (0, observe_1.createObserveModule)(), exports.ObserveModule = _a.ObserveModule, exports.ObserveInstrument = _a.ObserveInstrument;
 let AppModule = class AppModule {
 };
@@ -26,6 +27,7 @@ exports.AppModule = AppModule = __decorate([
                 serviceId: 'loja-api',
             }),
             products_module_1.ProductsModule,
+            catalog_module_1.CatalogModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

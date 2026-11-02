@@ -16,117 +16,67 @@ exports.ProductsController = void 0;
 const common_1 = require("@nestjs/common");
 const create_product_dto_1 = require("./dto/create-product.dto");
 const update_product_dto_1 = require("./dto/update-product.dto");
-const patch_product_dto_1 = require("./dto/patch-product.dto");
-const list_products_query_dto_1 = require("./dto/list-products-query.dto");
+const products_service_1 = require("./products.service");
 let ProductsController = class ProductsController {
-    products = [];
-    nextId = 1;
-    findAll(query) {
-        let result = this.products;
-        if (query.q) {
-            const searchTerm = query.q.toLowerCase();
-            result = result.filter((p) => p.name.toLowerCase().includes(searchTerm));
-        }
-        if (query.minPrice !== undefined) {
-            result = result.filter((p) => p.price >= query.minPrice);
-        }
-        if (query.maxPrice !== undefined) {
-            result = result.filter((p) => p.price <= query.maxPrice);
-        }
-        return result;
+    productsService;
+    constructor(productsService) {
+        this.productsService = productsService;
+    }
+    findAll() {
+        return this.productsService.findAll();
     }
     findOne(id) {
-        const product = this.products.find((p) => p.id === Number(id));
-        if (!product) {
-            throw new common_1.NotFoundException(`Produto ${id} não encontrado`);
-        }
-        return product;
+        return this.productsService.findOne(id);
     }
     create(dto) {
-        const product = {
-            id: this.nextId++,
-            name: dto.name,
-            price: dto.price,
-            stock: dto.stock,
-        };
-        this.products.push(product);
-        return product;
+        return this.productsService.create(dto);
     }
     update(id, dto) {
-        const product = this.findOne(id);
-        product.name = dto.name;
-        product.price = dto.price;
-        product.stock = dto.stock;
-        return product;
-    }
-    updatePartial(id, dto) {
-        const product = this.findOne(id);
-        if (dto.name !== undefined) {
-            product.name = dto.name;
-        }
-        if (dto.price !== undefined) {
-            product.price = dto.price;
-        }
-        if (dto.stock !== undefined) {
-            product.stock = dto.stock;
-        }
-        return product;
+        return this.productsService.update(id, dto);
     }
     remove(id) {
-        const index = this.products.findIndex((p) => p.id === Number(id));
-        if (index < 0) {
-            throw new common_1.NotFoundException(`Produto ${id} não encontrado`);
-        }
-        this.products.splice(index, 1);
+        this.productsService.remove(id);
     }
 };
 exports.ProductsController = ProductsController;
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [list_products_query_dto_1.ListProductsQueryDto]),
-    __metadata("design:returntype", Array)
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Object)
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
-    __metadata("design:returntype", Object)
+    __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "create", null);
 __decorate([
     (0, common_1.Put)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_product_dto_1.UpdateProductDto]),
-    __metadata("design:returntype", Object)
+    __metadata("design:paramtypes", [Number, update_product_dto_1.UpdateProductDto]),
+    __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "update", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, patch_product_dto_1.PatchProductDto]),
-    __metadata("design:returntype", Object)
-], ProductsController.prototype, "updatePartial", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(204),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "remove", null);
 exports.ProductsController = ProductsController = __decorate([
-    (0, common_1.Controller)('products')
+    (0, common_1.Controller)('products'),
+    __metadata("design:paramtypes", [products_service_1.ProductsService])
 ], ProductsController);
 //# sourceMappingURL=products.controller.js.map
