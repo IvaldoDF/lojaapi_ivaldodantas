@@ -31,11 +31,14 @@ let ProductsController = class ProductsController {
     create(dto) {
         return this.productsService.create(dto);
     }
-    update(id, dto) {
-        return this.productsService.update(id, dto);
+    update(id, updateProductDto) {
+        return this.productsService.update(id, updateProductDto);
     }
     remove(id) {
-        this.productsService.remove(id);
+        return this.productsService.remove(id);
+    }
+    updateCategory(id, categoryId) {
+        return this.productsService.updateCategory(id, categoryId);
     }
 };
 exports.ProductsController = ProductsController;
@@ -47,7 +50,7 @@ __decorate([
 ], ProductsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
@@ -60,8 +63,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "create", null);
 __decorate([
-    (0, common_1.Put)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, update_product_dto_1.UpdateProductDto]),
@@ -69,12 +72,19 @@ __decorate([
 ], ProductsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, common_1.HttpCode)(204),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Patch)(':id/category'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('categoryId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", void 0)
+], ProductsController.prototype, "updateCategory", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])

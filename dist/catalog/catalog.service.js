@@ -17,8 +17,8 @@ let CatalogService = class CatalogService {
     constructor(productsService) {
         this.productsService = productsService;
     }
-    getSummary() {
-        const products = this.productsService.findAll();
+    async getSummary() {
+        const products = await this.productsService.findAll();
         const totalProducts = products.length;
         const totalStockUnits = products.reduce((acc, product) => acc + product.stock, 0);
         return {

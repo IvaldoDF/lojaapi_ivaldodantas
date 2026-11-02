@@ -5,11 +5,11 @@ import { ProductsService } from '../products/products.service';
 export class CatalogService {
   constructor(private readonly productsService: ProductsService) {}
 
-  getSummary() {
-    const products = this.productsService.findAll();
+  async getSummary() {
+    const products = await this.productsService.findAll();
 
     const totalProducts = products.length;
-    const totalStockUnits = products.reduce((acc, product) => acc + product.stock, 0);
+    const totalStockUnits = products.reduce((acc: number, product: any) => acc + product.stock, 0);
 
     return {
       totalProducts,

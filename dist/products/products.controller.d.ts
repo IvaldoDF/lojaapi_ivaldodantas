@@ -4,9 +4,10 @@ import { ProductsService } from './products.service';
 export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
-    findAll(): import("./products.service").Product[];
-    findOne(id: number): import("./products.service").Product;
-    create(dto: CreateProductDto): import("./products.service").Product;
-    update(id: number, dto: UpdateProductDto): import("./products.service").Product;
-    remove(id: number): void;
+    findAll(): Promise<import("./product.entity").Product[]>;
+    findOne(id: number): Promise<import("./product.entity").Product>;
+    create(dto: CreateProductDto): Promise<import("./product.entity").Product>;
+    update(id: number, updateProductDto: UpdateProductDto): Promise<import("./product.entity").Product>;
+    remove(id: number): Promise<void>;
+    updateCategory(id: number, categoryId: number): Promise<import("./product.entity").Product>;
 }
