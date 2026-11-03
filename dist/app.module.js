@@ -17,6 +17,7 @@ const app_service_1 = require("./app.service");
 const products_module_1 = require("./products/products.module");
 const catalog_module_1 = require("./catalog/catalog.module");
 const categories_module_1 = require("./categories/categories.module");
+const orders_module_1 = require("./orders/orders.module");
 _a = (0, observe_1.createObserveModule)(), exports.ObserveModule = _a.ObserveModule, exports.ObserveInstrument = _a.ObserveInstrument;
 let AppModule = class AppModule {
 };
@@ -47,6 +48,7 @@ exports.AppModule = AppModule = __decorate([
             products_module_1.ProductsModule,
             catalog_module_1.CatalogModule,
             categories_module_1.CategoriesModule,
+            orders_module_1.OrdersModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
