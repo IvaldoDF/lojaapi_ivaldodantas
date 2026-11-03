@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -116,3 +117,6 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 =======
 # lojaapi_ivaldodantas
 >>>>>>> 3c1b99b209ff43f662f54a0b177f6ec526e091b3
+=======
+# loja-api
+>>>>>>> 1e4c3c44 (Oitavo commit:  Autenticacao capitulo06)
