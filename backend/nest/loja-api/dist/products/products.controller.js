@@ -42,8 +42,8 @@ let ProductsController = class ProductsController {
 exports.ProductsController = ProductsController;
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar produtos' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de produtos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Listar todos os produtos' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de produtos retornada com sucesso.' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
@@ -54,9 +54,20 @@ __decorate([
     (0, roles_decorator_1.Roles)('ADMIN'),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Criar produto (ADMIN)' }),
-    (0, swagger_1.ApiResponse)({ status: 201, description: 'Criado' }),
-    (0, swagger_1.ApiResponse)({ status: 401, description: 'Sem token' }),
-    (0, swagger_1.ApiResponse)({ status: 403, description: 'Papel insuficiente' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Produto criado com sucesso.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Erro de validação nos dados do produto.',
+        schema: {
+            example: {
+                statusCode: 400,
+                message: ['name must be a string', 'price must be a positive number'],
+                error: 'Bad Request'
+            }
+        }
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado (Token ausente ou inválido).' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Acesso negado (Papel insuficiente).' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
@@ -68,9 +79,21 @@ __decorate([
     (0, roles_decorator_1.Roles)('ADMIN', 'MANAGER'),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Atualizar produto (ADMIN / MANAGER)' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Atualizado com sucesso' }),
-    (0, swagger_1.ApiResponse)({ status: 401, description: 'Sem token' }),
-    (0, swagger_1.ApiResponse)({ status: 403, description: 'Papel insuficiente' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Produto atualizado com sucesso.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Erro de validação nos dados fornecidos.',
+        schema: {
+            example: {
+                statusCode: 400,
+                message: ['price must be a positive number'],
+                error: 'Bad Request'
+            }
+        }
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado.' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Acesso negado.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Produto não encontrado.' }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -84,9 +107,10 @@ __decorate([
     (0, common_1.HttpCode)(204),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Remover produto (ADMIN)' }),
-    (0, swagger_1.ApiResponse)({ status: 204, description: 'Removido com sucesso' }),
-    (0, swagger_1.ApiResponse)({ status: 401, description: 'Sem token' }),
-    (0, swagger_1.ApiResponse)({ status: 403, description: 'Papel insuficiente' }),
+    (0, swagger_1.ApiResponse)({ status: 204, description: 'Produto removido com sucesso.' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado.' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Acesso negado.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Produto não encontrado.' }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

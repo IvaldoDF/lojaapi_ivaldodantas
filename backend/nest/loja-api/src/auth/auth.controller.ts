@@ -15,7 +15,17 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: 'Registrar um novo usuário' })
   @ApiResponse({ status: 201, description: 'Usuário registrado com sucesso' })
-  @ApiResponse({ status: 400, description: 'Dados inválidos ou usuário já existente' })
+  @ApiResponse({ 
+    status: 400, 
+    description: 'Dados inválidos ou usuário já existente',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: ['username should not be empty', 'email must be an email'],
+        error: 'Bad Request'
+      }
+    }
+  })
   register(@Body() dto: RegisterDto) {
     return this.authService.register(dto.username, dto.email, dto.password);
   }
@@ -24,6 +34,17 @@ export class AuthController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Realizar login na aplicação' })
   @ApiResponse({ status: 200, description: 'Login efetuado com sucesso, retorna o token de acesso' })
+  @ApiResponse({ 
+    status: 400, 
+    description: 'Erro de validação nos dados de login',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: ['password must be longer than or equal to 6 characters'],
+        error: 'Bad Request'
+      }
+    }
+  })
   @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto.username, dto.password);

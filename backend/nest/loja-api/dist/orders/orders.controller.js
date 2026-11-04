@@ -42,6 +42,17 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Criar um novo pedido' }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Pedido criado com sucesso' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Erro de validação nos dados do pedido',
+        schema: {
+            example: {
+                statusCode: 400,
+                message: ['items must contain at least 1 elements', 'total must be a positive number'],
+                error: 'Bad Request'
+            }
+        }
+    }),
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado (sem token ou token inválido)' }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),

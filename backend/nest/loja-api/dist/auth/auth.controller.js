@@ -48,7 +48,17 @@ __decorate([
     (0, common_1.Post)('register'),
     (0, swagger_1.ApiOperation)({ summary: 'Registrar um novo usuário' }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Usuário registrado com sucesso' }),
-    (0, swagger_1.ApiResponse)({ status: 400, description: 'Dados inválidos ou usuário já existente' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Dados inválidos ou usuário já existente',
+        schema: {
+            example: {
+                statusCode: 400,
+                message: ['username should not be empty', 'email must be an email'],
+                error: 'Bad Request'
+            }
+        }
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [register_dto_1.RegisterDto]),
@@ -59,6 +69,17 @@ __decorate([
     (0, common_1.HttpCode)(200),
     (0, swagger_1.ApiOperation)({ summary: 'Realizar login na aplicação' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Login efetuado com sucesso, retorna o token de acesso' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Erro de validação nos dados de login',
+        schema: {
+            example: {
+                statusCode: 400,
+                message: ['password must be longer than or equal to 6 characters'],
+                error: 'Bad Request'
+            }
+        }
+    }),
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Credenciais inválidas' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

@@ -14,6 +14,17 @@ export class OrdersController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Criar um novo pedido' })
   @ApiResponse({ status: 201, description: 'Pedido criado com sucesso' })
+  @ApiResponse({ 
+    status: 400, 
+    description: 'Erro de validação nos dados do pedido',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: ['items must contain at least 1 elements', 'total must be a positive number'],
+        error: 'Bad Request'
+      }
+    }
+  })
   @ApiResponse({ status: 401, description: 'Não autorizado (sem token ou token inválido)' })
   create(
     @Req() req: { user: { userId: number } },

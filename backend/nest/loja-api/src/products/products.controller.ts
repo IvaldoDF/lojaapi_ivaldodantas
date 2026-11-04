@@ -24,8 +24,8 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar produtos' })
-  @ApiResponse({ status: 200, description: 'Lista de produtos' })
+  @ApiOperation({ summary: 'Listar todos os produtos' })
+  @ApiResponse({ status: 200, description: 'Lista de produtos retornada com sucesso.' })
   findAll() {
     return this.productsService.findAll();
   }
@@ -35,9 +35,20 @@ export class ProductsController {
   @Roles('ADMIN')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Criar produto (ADMIN)' })
-  @ApiResponse({ status: 201, description: 'Criado' })
-  @ApiResponse({ status: 401, description: 'Sem token' })
-  @ApiResponse({ status: 403, description: 'Papel insuficiente' })
+  @ApiResponse({ status: 201, description: 'Produto criado com sucesso.' })
+  @ApiResponse({ 
+    status: 400, 
+    description: 'Erro de validação nos dados do produto.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: ['name must be a string', 'price must be a positive number'],
+        error: 'Bad Request'
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Não autorizado (Token ausente ou inválido).' })
+  @ApiResponse({ status: 403, description: 'Acesso negado (Papel insuficiente).' })
   create(@Body() dto: CreateProductDto) {
     return this.productsService.create(dto);
   }
@@ -47,9 +58,21 @@ export class ProductsController {
   @Roles('ADMIN', 'MANAGER')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Atualizar produto (ADMIN / MANAGER)' })
-  @ApiResponse({ status: 200, description: 'Atualizado com sucesso' })
-  @ApiResponse({ status: 401, description: 'Sem token' })
-  @ApiResponse({ status: 403, description: 'Papel insuficiente' })
+  @ApiResponse({ status: 200, description: 'Produto atualizado com sucesso.' })
+  @ApiResponse({ 
+    status: 400, 
+    description: 'Erro de validação nos dados fornecidos.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: ['price must be a positive number'],
+        error: 'Bad Request'
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  @ApiResponse({ status: 403, description: 'Acesso negado.' })
+  @ApiResponse({ status: 404, description: 'Produto não encontrado.' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateProductDto,
@@ -63,9 +86,10 @@ export class ProductsController {
   @HttpCode(204)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Remover produto (ADMIN)' })
-  @ApiResponse({ status: 204, description: 'Removido com sucesso' })
-  @ApiResponse({ status: 401, description: 'Sem token' })
-  @ApiResponse({ status: 403, description: 'Papel insuficiente' })
+  @ApiResponse({ status: 204, description: 'Produto removido com sucesso.' })
+  @ApiResponse({ status: 401, description: 'Não autorizado.' })
+  @ApiResponse({ status: 403, description: 'Acesso negado.' })
+  @ApiResponse({ status: 404, description: 'Produto não encontrado.' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);
   }
