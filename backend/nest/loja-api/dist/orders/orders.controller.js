@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const create_order_dto_1 = require("./dto/create-order.dto");
 const orders_service_1 = require("./orders.service");
@@ -39,6 +40,9 @@ exports.OrdersController = OrdersController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Criar um novo pedido' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Pedido criado com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado (sem token ou token inválido)' }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -48,6 +52,9 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Listar pedidos do usuário/ator logado' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de pedidos retornada com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado' }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -56,6 +63,10 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Buscar detalhes de um pedido por ID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Detalhes do pedido retornados' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Pedido não encontrado' }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -65,6 +76,11 @@ __decorate([
 __decorate([
     (0, common_1.Post)(':id/cancel'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Cancelar um pedido por ID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Pedido cancelado com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão para cancelar este pedido' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Pedido não encontrado' }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -72,6 +88,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "cancel", null);
 exports.OrdersController = OrdersController = __decorate([
+    (0, swagger_1.ApiTags)('orders'),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [orders_service_1.OrdersService])
 ], OrdersController);

@@ -14,12 +14,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const auth_service_1 = require("./auth.service");
-const register_dto_1 = require("./dto/register.dto");
 const login_dto_1 = require("./dto/login.dto");
+const register_dto_1 = require("./dto/register.dto");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
-const roles_guard_1 = require("./roles.guard");
 const roles_decorator_1 = require("./roles.decorator");
+const roles_guard_1 = require("./roles.guard");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -45,6 +46,9 @@ let AuthController = class AuthController {
 exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('register'),
+    (0, swagger_1.ApiOperation)({ summary: 'Registrar um novo usuário' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Usuário registrado com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Dados inválidos ou usuário já existente' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [register_dto_1.RegisterDto]),
@@ -53,6 +57,9 @@ __decorate([
 __decorate([
     (0, common_1.Post)('login'),
     (0, common_1.HttpCode)(200),
+    (0, swagger_1.ApiOperation)({ summary: 'Realizar login na aplicação' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Login efetuado com sucesso, retorna o token de acesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Credenciais inválidas' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [login_dto_1.LoginDto]),
@@ -60,7 +67,11 @@ __decorate([
 ], AuthController.prototype, "login", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Get)('me'),
+    (0, swagger_1.ApiOperation)({ summary: 'Obter perfil do usuário logado' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Dados do perfil retornados com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado (token ausente ou inválido)' }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -69,13 +80,19 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('ADMIN'),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.Get)('admin-dashboard'),
+    (0, swagger_1.ApiOperation)({ summary: 'Acessar painel de administração (Apenas ADMIN)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Acesso permitido ao painel' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado (sem token)' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Permissão insuficiente (requer perfil ADMIN)' }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "getAdminDashboard", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);

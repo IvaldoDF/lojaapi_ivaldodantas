@@ -20,10 +20,14 @@ const roles_guard_1 = require("../auth/roles.guard");
 const create_product_dto_1 = require("./dto/create-product.dto");
 const update_product_dto_1 = require("./dto/update-product.dto");
 const products_service_1 = require("./products.service");
+const swagger_1 = require("@nestjs/swagger");
 let ProductsController = class ProductsController {
     productsService;
     constructor(productsService) {
         this.productsService = productsService;
+    }
+    findAll() {
+        return this.productsService.findAll();
     }
     create(dto) {
         return this.productsService.create(dto);
@@ -37,9 +41,22 @@ let ProductsController = class ProductsController {
 };
 exports.ProductsController = ProductsController;
 __decorate([
+    (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Listar produtos' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de produtos' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ProductsController.prototype, "findAll", null);
+__decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('ADMIN'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Criar produto (ADMIN)' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'Criado' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Sem token' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Papel insuficiente' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
@@ -49,6 +66,11 @@ __decorate([
     (0, common_1.Put)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('ADMIN', 'MANAGER'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Atualizar produto (ADMIN / MANAGER)' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Atualizado com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Sem token' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Papel insuficiente' }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -60,12 +82,18 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('ADMIN'),
     (0, common_1.HttpCode)(204),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Remover produto (ADMIN)' }),
+    (0, swagger_1.ApiResponse)({ status: 204, description: 'Removido com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Sem token' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'Papel insuficiente' }),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "remove", null);
 exports.ProductsController = ProductsController = __decorate([
+    (0, swagger_1.ApiTags)('products'),
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])
 ], ProductsController);

@@ -1,20 +1,31 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,              // remove propriedades sem decorator no DTO
-      forbidNonWhitelisted: true,   // 400 se o client enviar campo desconhecido
-      transform: true,              // plain object → instância da classe (+ conversões)
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
       transformOptions: {
-        enableImplicitConversion: true, // "42" (string) → 42 (number) quando o tipo pede
+        enableImplicitConversion: true, // igual ao cap. 2.1 — não remova ao adicionar Swagger
       },
     }),
   );
+
+  const config = new DocumentBuilder()
+    .setTitle('loja-api')
+    .setDescription('API da trilha NestJS — linha P')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
 }

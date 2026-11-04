@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductDto = void 0;
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 class CreateProductDto {
     name;
     price;
@@ -18,16 +19,19 @@ class CreateProductDto {
 }
 exports.CreateProductDto = CreateProductDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Caneca Nest', minLength: 2 }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(2, { message: 'Informe um nome com pelo menos 2 caracteres' }),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "name", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 39.9, minimum: 0.01 }),
     (0, class_validator_1.IsNumber)({ maxDecimalPlaces: 2 }),
     (0, class_validator_1.Min)(0.01, { message: 'price deve ser maior que zero' }),
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "price", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 10, minimum: 0 }),
     (0, class_validator_1.IsInt)(),
     (0, class_validator_1.Min)(0, { message: 'stock não pode ser negativo' }),
     __metadata("design:type", Number)
