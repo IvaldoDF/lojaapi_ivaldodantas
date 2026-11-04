@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Product } from './product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { existsSync, unlinkSync } from 'fs'; 
+import { join, basename } from 'path';
 
 @Injectable()
 export class ProductsService {
@@ -50,4 +52,23 @@ export class ProductsService {
     product.category_id = categoryId;
     return await this.productsRepository.save(product);
   }
+  
+  async updateImageFilename(id: number, filename: string) {
+    const product = await this.findOne(id);
+    product.imageFilenames = filename;
+    return this.productsRepository.save(product);
+  }
+
+  async removeImage(id: number) {
+  const product = await this.findOne(id);
+  if (product.imageFilenames) {
+    const filePath = join(process.cwd(), 'uploads', basename(product.imageFilenames));
+    if (existsSync(filePath)) {
+      unlinkSync(filePath);
+    }
+    product.imageFilenames = null; 
+    await this.productsRepository.save(product);
+  }
+  return product;
+}
 }

@@ -6,4 +6,5 @@ export declare class Product {
     stock: number;
     category: Category;
     category_id: number;
+    imageFilenames: string | null;
 }

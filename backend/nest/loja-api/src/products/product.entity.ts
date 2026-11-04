@@ -21,4 +21,7 @@ export class Product {
 
   @Column({ nullable: true })
   category_id: number;
+
+  @Column({ type: 'text', nullable: true })
+  imageFilenames: string | null;
 }

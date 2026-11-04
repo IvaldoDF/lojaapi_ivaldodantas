@@ -19,6 +19,7 @@ let Product = class Product {
     stock;
     category;
     category_id;
+    imageFilenames;
 };
 exports.Product = Product;
 __decorate([
@@ -46,6 +47,10 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Number)
 ], Product.prototype, "category_id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", Object)
+], Product.prototype, "imageFilenames", void 0);
 exports.Product = Product = __decorate([
     (0, typeorm_1.Entity)('products')
 ], Product);

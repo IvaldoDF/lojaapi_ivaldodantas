@@ -17,6 +17,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const product_entity_1 = require("./product.entity");
+const fs_1 = require("fs");
+const path_1 = require("path");
 let ProductsService = class ProductsService {
     productsRepository;
     constructor(productsRepository) {
@@ -54,6 +56,23 @@ let ProductsService = class ProductsService {
         const product = await this.findOne(productId);
         product.category_id = categoryId;
         return await this.productsRepository.save(product);
+    }
+    async updateImageFilename(id, filename) {
+        const product = await this.findOne(id);
+        product.imageFilenames = filename;
+        return this.productsRepository.save(product);
+    }
+    async removeImage(id) {
+        const product = await this.findOne(id);
+        if (product.imageFilenames) {
+            const filePath = (0, path_1.join)(process.cwd(), 'uploads', (0, path_1.basename)(product.imageFilenames));
+            if ((0, fs_1.existsSync)(filePath)) {
+                (0, fs_1.unlinkSync)(filePath);
+            }
+            product.imageFilenames = null;
+            await this.productsRepository.save(product);
+        }
+        return product;
     }
 };
 exports.ProductsService = ProductsService;

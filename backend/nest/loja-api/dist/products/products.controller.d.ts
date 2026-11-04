@@ -1,3 +1,4 @@
+import { StreamableFile } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
@@ -8,4 +9,9 @@ export declare class ProductsController {
     create(dto: CreateProductDto): Promise<import("./product.entity").Product>;
     update(id: number, dto: UpdateProductDto): Promise<import("./product.entity").Product>;
     remove(id: number): Promise<void>;
+    uploadImage(id: number, file: Express.Multer.File): Promise<{
+        productId: number;
+        imageUrl: string;
+    }>;
+    getImage(id: number): Promise<StreamableFile>;
 }

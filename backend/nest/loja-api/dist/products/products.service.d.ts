@@ -11,4 +11,6 @@ export declare class ProductsService {
     update(id: number, dto: UpdateProductDto): Promise<Product>;
     remove(id: number): Promise<void>;
     updateCategory(productId: number, categoryId: number): Promise<Product>;
+    updateImageFilename(id: number, filename: string): Promise<Product>;
+    removeImage(id: number): Promise<Product>;
 }
